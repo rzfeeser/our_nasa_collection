@@ -1,0 +1,21 @@
+---
+- name: Invoke NASA API
+  hosts: localhost
+  gather_facts: False
+
+  vars:
+    start_date: "{{ start_date }}"
+    end_date: "{{ end_date }}"
+    api_key: "{{ api_key }}"
+    version: "{{ version }}"
+  tasks:
+    - name: Invoke NASA API using ansible.builtin.uri
+      ansible.builtin.uri:
+        url: "https://api.nasa.gov/neo/rest/{{ version }}/feed?start_date={{ start_date }}&end_date={{ end_date }}&api_key={{ api_key }}"
+        method: GET
+        return_content: yes
+      register: response
+
+    - name: Display response from NASA API
+      debug:
+        var: response.content
