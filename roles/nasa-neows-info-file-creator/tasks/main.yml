@@ -1,0 +1,24 @@
+---
+# tasks file for nasa-neows-info-file-creator
+- name: Get NEO data between start and end date
+  ansible.builtin.uri:
+    url: "https://api.nasa.gov/neo/rest/v1/feed?start_date={{ one_week_ago }}&end_date={{ today }}&api_key={{ api_key }}"
+    method: GET
+    return_content: yes
+    validate_certs: no
+    body_format: json
+  register: neo_response
+
+- name: Extracting specific details
+  set_fact:
+    near_objects: "{{ neo_response.json.near_earth_objects | dict2items | items2dict(key_name='key', value_name='value') }}"
+
+- name: Display specific details of NEO
+  debug:
+    msg: "Date: {{ item.key }}, Details: {{ item.value | map(attribute='name') | list }}"
+  with_dict: "{{ near_objects }}"
+
+- name: Save NEO details to a file
+  copy:
+    content: "{{ near_objects | to_nice_json }}"
+    dest: "./neo_report.json"

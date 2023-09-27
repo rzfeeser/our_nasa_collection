@@ -1,0 +1,6 @@
+---
+# defaults file for nasa-neows-info
+start_date: "{{ start_date }}"
+end_date: "{{ end_date }}"
+api_key: "{{ api_key }}"
+version: "{{ version }}"

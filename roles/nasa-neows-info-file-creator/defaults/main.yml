@@ -1,0 +1,4 @@
+---
+api_key: "{{ api_key }}"
+today: "{{ lookup('pipe', 'date +%Y-%m-%d') }}"
+one_week_ago: "{{ lookup('pipe', 'date -d\"1 week ago\" +%Y-%m-%d') }}"
